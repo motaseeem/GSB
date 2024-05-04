@@ -23,12 +23,6 @@ use Outils\Utilitaires;
 $lesvisiteurs = $pdo->getToutLesVisiteurs(); //     la fonction qui va venire lancé des requte sql pour mettre à jour les valeurs 
 $lesmois = $pdo->getToutLesMois();
 $action = $_GET['action'];
-//var_dump($recupefrais);
-//var_dump($lesvisiteurs);
-// $_get = id visiteurs , mois 
-//var_dump($_GET);
-//var_dump($_POST['lesFrais']);
-// var_dump($_POST);
 
 switch ($action) {
 
@@ -48,10 +42,12 @@ switch ($action) {
        //     echo 'ça marche pas fils';
      //   }
         $_SESSION['fiche_frais'] = [//$ session c'est l'armoire de casier  et a'linterieur un autre casier fiche frias et dedans je mis mini caiser  : visiteur , mois /// il permet de recupere les valeurs peu import ou je suis 
-
+            
             'visiteur' => $_POST['selectvisiteur'],
             'mois' => $_POST['lstMois'] // on les recuepres des formualires 
         ];
+        
+        
          header("Location: index.php?uc=gererFrais&action=saisirFrais"); // lien il va valider le saisir le frais  qui dirigre vers la page gerer frais
         //l'header ça permet de rajouter des infroamtions pour le client donne aux client implementé au code 
         // c'est information que le serveur 
@@ -131,10 +127,12 @@ require PATH_VIEWS . 'Comptable/v_menu_derolante.php'; //si tu mis le variable a
 if (!empty($_SESSION['fiche_frais'])) {
     // Récupérez les frais forfaitisés et hors forfait du visiteur pour le mois spécifié.
     $recupefrais = $pdo->getLesFraisForfait($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois']);
+    
     $recupefraishorsforfait = $pdo->getLesFraisHorsForfait($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois']);
 
     // Vérifiez si des frais ont été récupérés.
     if (!empty($recupefrais)) {
+
         // Si des frais ont été récupérés, incluez les vues pour les afficher.
         require PATH_VIEWS . 'Comptable/v_listeFraisForfait.php';
         require PATH_VIEWS . 'Comptable/v_listeFraisHorsForfait.php';
