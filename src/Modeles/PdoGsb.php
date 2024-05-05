@@ -97,7 +97,6 @@ class PdoGsb {
         //    $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
         $requetePrepare->execute();
         $user = $requetePrepare->fetch();
-        var_dump($user);
         
         if (empty($user)) {
             return null;

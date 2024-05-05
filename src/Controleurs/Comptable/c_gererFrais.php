@@ -20,66 +20,45 @@
  */
 use Outils\Utilitaires;
 
-$lesvisiteurs = $pdo->getToutLesVisiteurs(); //     la fonction qui va venire lancé des requte sql pour mettre à jour les valeurs 
+$lesvisiteurs = $pdo->getToutLesVisiteurs(); 
 $lesmois = $pdo->getToutLesMois();
 $action = $_GET['action'];
 
 switch ($action) {
 
     case 'updateSelectFicheFrais':
-        //qlqchose = $pdo->getLesInfosFicheFrais($_POST['selectvisiteur'], $_POST['lstMois']);
-       // var_dump($qlqchose);
-
-     //   if ($qlqchose['idEtat'] == 'CL') {
-
-
-            //c'est un tableau  , 
-            //commont ajouter q. q chose en session     //fiche frais l'ettiquette qui est la valeur dans la session 
-            
-            //le date time c'est lui qui confrtis 
-            //la cree sur la valeur de lois fiche frais 
-       // } else {
-       //     echo 'ça marche pas fils';
-     //   }
-        $_SESSION['fiche_frais'] = [//$ session c'est l'armoire de casier  et a'linterieur un autre casier fiche frias et dedans je mis mini caiser  : visiteur , mois /// il permet de recupere les valeurs peu import ou je suis 
+      
+        $_SESSION['fiche_frais'] = [
             
             'visiteur' => $_POST['selectvisiteur'],
             'mois' => $_POST['lstMois'] // on les recuepres des formualires 
         ];
         
         
-         header("Location: index.php?uc=gererFrais&action=saisirFrais"); // lien il va valider le saisir le frais  qui dirigre vers la page gerer frais
-        //l'header ça permet de rajouter des infroamtions pour le client donne aux client implementé au code 
-        // c'est information que le serveur 
+         header("Location: index.php?uc=gererFrais&action=saisirFrais"); 
+        
         break;
     case 'mettreAjourFicheFrais':
-        //dans ma nouvelle swtich case je doit mettre ajour les elements rempli dans les champs et les mettre à jour dans la bdd
 
         $pdo->majFraisForfait($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois'], $_POST['lesFrais']); //faire appelle a la fonction 
 
-        header("Location: index.php?uc=gererFrais&action=saisirFrais"); // lien il va valider le saisir le frais  qui dirigre vers la page gerer frais
+        header("Location: index.php?uc=gererFrais&action=saisirFrais");
         break;
     case 'updateSelectFicheFraishorsforfait':
 
-        if ($_POST['submit'] == 'Corriger') {            //si le submit == corgier tu fait telle action sinon tu fait tel action 
-            //tu fait le parti de code qui coresspond à la correction 
+        if ($_POST['submit'] == 'Corriger') {          
             $date = DateTime::createFromFormat('d/m/Y', $_POST['madate']); //creation objet datetime aveccune vrai date qui recupere depuis le formualire 
             $formattedDate = $date->format('Y-m-d'); // on passe de mon objet datetime à nouevelle objet //ca passe de format fr à from american 
 
             $pdo->MajFraisHorsForfait($_POST['id'], $formattedDate, $_POST['malibelle'], $_POST['mamontant']); //il faut remplacer avec le dolllar post    MajFraisHorsForfait($id, $Date, $libelle, $Montant)            
-            /// on a cree un variable qui se base sur ce qui dans le ligne 52 on l'a mis à la place de notre variable $_post[madate']
         } else if ($_POST['submit'] == 'Refuser') {
-            //if (isset($_POST['id'])) {
-            //  $pdo->RefusFraisHorsFrait($_POST['id']);
-            //plusierlle 
-            //}//faire appelle a la fonction qui recupere le mois suivent de mois qu on lui ia donné   
+            
             $MoisSuivent = Utilitaires::donnerMoisSuivant($_SESSION['fiche_frais']['mois']); //static il est lié à la classe on a pas besoin de cree une objet pour la utiliser 
             if ($pdo->estPremierFraisMois($_SESSION['fiche_frais']['visiteur'], $MoisSuivent)) {// on va ici si le fiche de frais ne exist pas si il exist pas on rajoute ce qui il faut ffaire et c'est de la crreéé
                 $pdo->creeNouvellesLignesFrais($_SESSION['fiche_frais']['visiteur'], $MoisSuivent); //
             }
             $date = DateTime::createFromFormat('d/m/Y', $_POST['madate']); //creation objet datetime aveccune vrai date qui recupere depuis le formualire 
             $formattedDate = $date->format('Y-m-d'); // on passe de mon objet datetime à nouevelle objet //ca passe de format fr à from american 
-            // on a utilksé dollarr parce que on a recupere des elements depuis le formualire quand on clique sur le bouton supprimere ça nous donne tout les info en lien de frais hors forfait tout la rest on peux la recuepre depuis dollar 
             $pdo->creeNouveauFraisHorsForfait(
                     $_SESSION['fiche_frais']['visiteur'],
                     $MoisSuivent,
@@ -90,12 +69,7 @@ switch ($action) {
 
             $pdo->supprimerFraisHorsForfait($_POST['id']);
 
-            //
-            //
-            //etpa1 :pour la fiche de mois actuelle  allez recupere le mois d'apres faut  baser sur la date ou on est actuellemment dnas le vrai vie 
-            //etap2 : il faudrait verifé si i ly a fiche de frais pour le mois suivent existe  , dans le cas ou le fiche ne existe pas on  va la cree si il existe on recupere c'est tout rien à faire 
-            //etpa3 : creation nouvelle ligne frais hors forfait qui a ete pour la fiche de frais de mois suivent  , 
-            //etpa4 : supprimer le frais hors forfait pour le mois actuelle parce que ce sera deplacer dans le mois suivent 
+         
         }
 
 
@@ -107,9 +81,7 @@ switch ($action) {
         break;
     case 'validerfichedefrais':   //action faire en paramretre pour valider la fiche l'action qui fait ça
         $calculemontanttotalfichefrais = $pdo->calculeToutFicheFrais($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois']);
-        //var_dump($calculemontanttotalfichefrais);
         $updatelefichefdefrais = $pdo->updatetotalficheFrais($calculemontanttotalfichefrais, $_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois']);
-        //   var_dump($updatelefichefdefrais);
         $validerfrais = $pdo->majEtatFicheFrais($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois'], 'VA'); //on acrit VA on sait qque on la mettre valider donc on la mis uniqment comme ça sans besoin de faire d'autres modif il suiffet juste de la ecrire comme ça 
         Utilitaires::ajouterMessage('La fiche de frais a été validée avec succès.');
 
@@ -120,7 +92,6 @@ switch ($action) {
         break;
 }
 
-//var_dump($_POST['submit']);
 
 require PATH_VIEWS . 'Comptable/v_menu_derolante.php'; //si tu mis le variable apres le require il serait pas et i le affiche pas 
 // Vérifiez si la session 'fiche_frais' contient des données.
@@ -154,10 +125,8 @@ if (!empty($_SESSION['fiche_frais'])) {
  */
 //pour les supression de frais hors forfait qui le comptable juge que ils sont non utile ou pas professionelle faut cree en 1er le bouton 
 //supprimer que quand il declanche  il modifie le champe de libelle conerné  en rahoutant le mot refusé ?, en la ra rajoutant dans la bdd 
-//var_dump($_POST(RefusFraisHorsFrait('libelle')));
 include PATH_VIEWS . 'Comptable/v_MessageSucess.php';
 
-// var_dump($pdo->MajFraisHorsForfait(1 ,'2023-03-06' ,' Taxiii' , 245.01));
 
 
 

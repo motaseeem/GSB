@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -27,6 +28,10 @@ switch ($action) {
         include PATH_VIEWS . 'v_connexion.php';
         break;
     case 'valideConnexion':
+        var_dump($uc);
+        if( empty($_POST)) {
+            header("Location: index.php?uc=connexion&action=demandeConnexion");
+        }
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $mdp = filter_input(INPUT_POST, 'mdp', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -40,7 +45,6 @@ switch ($action) {
         }
        //on reapplique le hash et apres on a juste les mots de basse celle de formaulaire et celle haché si c'est le meme c'est que c'est la bonne mdp 
         //l'interet de hash en bdd on aura pas le mdp en clair ça premet de proteger les mdp en bdd car ils seront haché  le piarete il le aura pas en clair 
-     
          $mdp = hash('sha224', $mdp);
         if (empty($user) || is_null($user) ||  $mdp != $user['mdp'])  {
             Utilitaires::ajouterErreur('Login ou mot de passe incorrect');

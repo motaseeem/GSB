@@ -14,34 +14,14 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-/*
-  use Outils\Utilitaires;
-  $action = $_GET['action'];
-
-  $recupefrais = $pdo->getLesFraisForfait($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois']);
-  $recupefraishorsforfait = $pdo->getLesFraisHorsForfait($_SESSION['fiche_frais']['visiteur'], $_SESSION['fiche_frais']['mois']);
-
-  //recupereation de tout les fiche de frais qui ont un statut valider
-  $recupinfoFicheFrais = $pdo->RecupFicheFrais('VA');
-  //$action = $_GET['action'];
-  //var_dump($recupinfoFicheFrais);
-
-  include PATH_VIEWS . 'Comptable/v_SuivreFichedeFrais.php';
-
-  switch ($action) {
-
-  case 'SelectFicheFrais':
-
-  $_SESSION['fiche_frais'] = [//$ session c'est l'armoire de casier  et a'linterieur un autre casier fiche frias et dedans je mis mini caiser  : visiteur , mois /// il permet de recupere les valeurs peu import ou je suis
-  'Fiche Frais' => $_POST['selectvisiteurEtMois'],// les elments que je doit recupere à partir d'un id fiche frais commont porceder à les afficher
-  ];
 
 
-  //$action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  $idVisiteur = $_SESSION['idVisiteur'];
 
 
- */
+
+
+
+
 
 use Outils\Utilitaires;
 
@@ -224,7 +204,6 @@ include PATH_VIEWS . 'Comptable/v_SuivreFichedeFrais.php';
  */
 
 if (!empty($_SESSION['suivre_fichefrais'])) {
-    //  var_dump($_SESSION['suivre_fichefrais']['visiteur']);
     $visiteur = $_SESSION['suivre_fichefrais']['visiteur'];
     $mois = $_SESSION['suivre_fichefrais']['mois'];
 

@@ -1,4 +1,3 @@
-@ -1,52 +0,0 @@
 <div class="row">
     <div class="panel panel-info">
         <div class="panel-heading">Descriptif des éléments hors forfait</div>
